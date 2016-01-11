@@ -33,6 +33,10 @@ BOARD_MKBOOTIMG_ARGS += --dt_dir $(OUT)/dtbs
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 
+# init
+TARGET_INIT_VENDOR_LIB := libinit_msm
+TARGET_LIBINIT_DEFINES_FILE := device/sony/common/libinit/init_sony.cpp
+
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/sony/common/releasetools
 
