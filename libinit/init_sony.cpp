@@ -51,8 +51,9 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
 
     property_get("ro.fxp.variant", model);
 
-    // make family letter uppercase
-    model[0] -= 32;
+    // make family letter uppercase if needed
+    if(model[0] > 90)
+        model[0] -= 32;
 
     // strip first character
     sscanf(&model[1], "%d", &m_number);
