@@ -27,9 +27,6 @@
 
 #include "power.h"
 
-#define CPUFREQ_PATH "/sys/devices/system/cpu/cpu0/cpufreq/"
-#define INTERACTIVE_PATH "/sys/devices/system/cpu/cpufreq/interactive/"
-
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 static int boostpulse_fd = -1;
 
