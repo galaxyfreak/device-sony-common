@@ -23,18 +23,19 @@ BUILD_KERNEL := false
 
 # common cmdline parameters
 BOARD_KERNEL_CMDLINE += user_debug=31 androidboot.selinux=permissive
-BOARD_KERNEL_CMDLINE += msm_rtb.filter=0x3F ehci-hcd.park=3
-BOARD_KERNEL_CMDLINE += dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y
+BOARD_KERNEL_CMDLINE += msm_rtb.filter=0x37
 BOARD_KERNEL_CMDLINE += coherent_pool=8M
 
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset $(BOARD_RAMDISK_OFFSET) --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
+
 
 # init
 TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := device/sony/common/libinit/init_sony.cpp
+TARGET_LIBINIT_DEFINES_FILE := device/sony/common/init/init_sony.cpp
 
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/sony/common/releasetools
@@ -56,9 +57,7 @@ BOARD_USES_ALSA_AUDIO := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 
 #Camera
-TARGET_USES_AOSP := true
 BOARD_QTI_CAMERA_32BIT_ONLY := true
-BOARD_QTI_CAMERA_V2 := true
 
 # GPS definitions for Qualcomm solution
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
@@ -76,11 +75,7 @@ EXTENDED_FONT_FOOTPRINT := true
 
 # Enable dex-preoptimization to speed up first boot sequence
 ifeq ($(HOST_OS),linux)
-  ifneq ($(TARGET_BUILD_VARIANT),eng)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-    endif
-  endif
+    WITH_DEXPREOPT ?= true
 endif
 
 # Include build helpers for QCOM proprietary

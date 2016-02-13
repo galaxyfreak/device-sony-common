@@ -16,14 +16,11 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-ifneq ($(TARGET_TAP_TO_WAKE_NODE),)
-    LOCAL_CFLAGS += -DTAP_TO_WAKE_NODE=\"$(TARGET_TAP_TO_WAKE_NODE)\"
-endif
-
-LOCAL_SRC_FILES := power.c
-LOCAL_SHARED_LIBRARIES := liblog libcutils
-LOCAL_MODULE := power.$(TARGET_DEVICE)
-LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_RELATIVE_PATH := hw
+LOCAL_SHARED_LIBRARIES := liblog libcutils
+LOCAL_SRC_FILES := power.c
 
+LOCAL_MODULE := power.yukon
+
+LOCAL_MODULE_TAGS := optional
 include $(BUILD_SHARED_LIBRARY)

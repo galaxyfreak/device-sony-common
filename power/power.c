@@ -16,6 +16,7 @@
  */
 
 #include <errno.h>
+#include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
 
@@ -27,11 +28,39 @@
 
 #include "power.h"
 
+#define CPUFREQ_PATH "/sys/devices/system/cpu/cpu0/cpufreq/"
+#define INTERACTIVE_PATH "/sys/devices/system/cpu/cpufreq/interactive/"
+
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 static int boostpulse_fd = -1;
 
 static int current_power_profile = -1;
 static int requested_power_profile = -1;
+static int is_8928 = -1;
+
+static int is_target_8928()
+{
+    int fd;
+    char buf[10] = {0};
+
+    if (is_8928 >= 0)
+        return is_8928;
+
+    fd = open("/sys/devices/soc0/soc_id", O_RDONLY);
+    if (fd >= 0) {
+        if (read(fd, buf, sizeof(buf) - 1) == -1) {
+            ALOGW("%s: Unable to read soc_id", __func__);
+            is_8928 = 0;
+        } else {
+            int soc_id = atoi(buf);
+            if ((soc_id == 221) || (soc_id == 224)) {
+            is_8928 = 1;
+            }
+        }
+    }
+    close(fd);
+    return is_8928;
+}
 
 static int sysfs_write_str(char *path, char *s)
 {
@@ -113,8 +142,8 @@ static void set_power_profile(int profile)
                     profiles[profile].min_sample_time);
     sysfs_write_str(INTERACTIVE_PATH "target_loads",
                     profiles[profile].target_loads);
-    sysfs_write_int(CPUFREQ_PATH "scaling_max_freq",
-                    profiles[profile].scaling_max_freq);
+    sysfs_write_int(CPUFREQ_PATH "scaling_max_freq", is_target_8928() ?
+                    profiles[profile].scaling_max_freq_28 : profiles[profile].scaling_max_freq_26);
 
     current_power_profile = profile;
 }
@@ -191,18 +220,6 @@ static void set_interactive(__attribute__((unused)) struct power_module *module,
     }
 }
 
-void set_feature(__attribute__((unused)) struct power_module *module,
-                 feature_t feature, int state)
-{
-#ifdef TAP_TO_WAKE_NODE
-    if (feature == POWER_FEATURE_DOUBLE_TAP_TO_WAKE) {
-            ALOGI("Double tap to wake is %s.", state ? "enabled" : "disabled");
-            sysfs_write_str(TAP_TO_WAKE_NODE, state ? "1" : "0");
-        return;
-    }
-#endif
-}
-
 static struct hw_module_methods_t power_module_methods = {
     .open = NULL,
 };
@@ -219,7 +236,7 @@ static int get_feature(__attribute__((unused)) struct power_module *module,
 struct power_module HAL_MODULE_INFO_SYM = {
     .common = {
         .tag = HARDWARE_MODULE_TAG,
-        .module_api_version = POWER_MODULE_API_VERSION_0_3,
+        .module_api_version = POWER_MODULE_API_VERSION_0_2,
         .hal_api_version = HARDWARE_HAL_API_VERSION,
         .id = POWER_HARDWARE_MODULE_ID,
         .name = "Simple Power HAL",
@@ -230,6 +247,5 @@ struct power_module HAL_MODULE_INFO_SYM = {
     .init = power_init,
     .powerHint = power_hint,
     .setInteractive = set_interactive,
-    .setFeature = set_feature,
-    .getFeature = get_feature,
+    .getFeature = get_feature
 };

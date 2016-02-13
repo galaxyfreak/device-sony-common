@@ -34,21 +34,16 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
-    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
     frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
     frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
-
-# Common init
-PRODUCT_COPY_FILES += \
-    device/sony/common/rootdir/init.common.rc:root/init.common.rc \
-    device/sony/common/rootdir/init.common.usb.rc:root/init.common.usb.rc
 
 # Common etc
 PRODUCT_COPY_FILES += \
@@ -85,7 +80,6 @@ PRODUCT_PACKAGES += \
 
 # GFX
 PRODUCT_PACKAGES += \
-    libhdmi \
     libqdutils \
     libqdMetaData
 
@@ -108,7 +102,6 @@ PRODUCT_PACKAGES += \
 
 # WLAN
 PRODUCT_PACKAGES += \
-    p2p_supplicant.conf \
     dhcpcd.conf \
     hostapd \
     libwpa_client \
@@ -119,7 +112,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libmmcamera_interface \
     libmmjpeg_interface \
-    libmm-qcamera \
     libqomx_core
 
 # OSS
@@ -129,18 +121,9 @@ PRODUCT_PACKAGES += \
     thermanager \
     macaddrsetup
 
-# QCOM OSS
-PRODUCT_PACKAGES += \
-   librmnetctl
-
 # Charger
 PRODUCT_PACKAGES += \
     charger_res_images
-
-# AOSP Packages
-PRODUCT_PACKAGES += \
-    InCallUI \
-    Launcher3
 
 PRODUCT_PACKAGES += \
     libion \
@@ -154,18 +137,9 @@ PRODUCT_COPY_FILES += \
     device/sample/etc/old-apns-conf.xml:system/etc/old-apns-conf.xml \
     device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml
 
-# Limit dex2oat threads to improve thermals
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.dex2oat-threads=2 \
-    dalvik.vm.image-dex2oat-threads=4
-
 # Platform specific default properties
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.qmi.adb_logmask=0
-
-# Enable MultiWindow
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.debug.multi_window=true
 
 # System props for the data modules
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -239,20 +213,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # System prop for NFC DT
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.nfc.port=I2C
-
-# Camera
-PRODUCT_PROPERTY_OVERRIDES += \
-    camera.disable_zsl_mode=0 \
-    persist.camera.HAL3.enabled=1 \
-    persist.camera.ois.disable=0
-
-# Sensors
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qti.sensors.dpc=true
-
-# Sensors debug
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.debug.sensors.hal=0 \
-    debug.qualcomm.sns.daemon=0 \
-    debug.qualcomm.sns.hal=0 \
-    debug.qualcomm.sns.libsensor1=0
