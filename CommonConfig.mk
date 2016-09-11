@@ -61,6 +61,10 @@ TARGET_NO_RPC := true
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
+BOARD_HEALTHD_CUSTOM_CHARGER_RES := $(LOCAL_PATH)/charger/images
+COMMON_GLOBAL_CFLAGS += \
+    -DBOARD_CHARGING_CMDLINE_NAME='"androidboot.mode"' \
+    -DBOARD_CHARGING_CMDLINE_VALUE='"chargerlogo"'
 
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
