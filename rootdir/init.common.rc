@@ -120,6 +120,9 @@ on charger
     start irsc_util
 
 on early-boot
+    # Offline charging
+    exec /system/bin/chargemon
+
     # Set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
 
@@ -312,12 +315,6 @@ service thermanager /system/bin/thermanager /system/etc/thermanager.xml
     class main
     user root
     group root
-
-# Offline charger
-service charger /sbin/healthd -c
-    class charger
-    critical
-    seclabel u:r:healthd:s0
 
 # OSS time
 service timekeep /system/bin/timekeep restore

@@ -14,6 +14,9 @@
 
 DEVICE_PACKAGE_OVERLAYS += device/sony/common/overlay
 
+# Chargemon
+$(call inherit-product, device/sony/common/chargemon/images.mk)
+
 # Common Specific Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
@@ -136,10 +139,6 @@ PRODUCT_PACKAGES += \
 # Gello
 PRODUCT_PACKAGES += \
     Gello
-
-# Charger
-PRODUCT_PACKAGES += \
-    charger_res_images
 
 # AOSP Packages
 PRODUCT_PACKAGES += \
